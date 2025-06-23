@@ -1,0 +1,32 @@
+{
+	"name": "boilerplate_nestjs",
+	"version": "1.0.0",
+	"description": "",
+	"main": "dist/server.js",
+	"scripts": {
+		"start": "node .",
+		"build": "tsc --project tsconfig.json && tsc-alias",
+		"dev": "tsx --watch src/server.ts",
+		"lint": "biome check --write --unsafe",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.12.2",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.21.2",
+		"express-async-errors": "^3.1.1",
+		"zod": "^3.25.67"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.0.5",
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.3",
+		"@types/node": "^24.0.3",
+		"tsc-alias": "^1.8.16",
+		"tsx": "^4.20.3",
+		"typescript": "^5.8.3"
+	}
+}
