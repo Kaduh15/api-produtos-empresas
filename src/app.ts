@@ -4,6 +4,7 @@ import express from "express";
 import "express-async-errors";
 
 import errorMiddleware from "@/middlewares/error.middleware";
+import { env } from "./env";
 
 class App {
 	public app: express.Express;
@@ -18,7 +19,7 @@ class App {
 	private config(): void {
 		this.app.use(
 			cors({
-				origin: "*",
+				origin: env.URL_CORS,
 				methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 				allowedHeaders: ["Content-Type", "Authorization"],
 			}),
@@ -37,11 +38,12 @@ class App {
 			});
 			return;
 		});
+		
+		this.app.use(errorMiddleware);
 
 		this.app.use("*", (_req, res, _next) => {
 			res.redirect("/docs");
 		});
-		this.app.use(errorMiddleware);
 	}
 
 	public start(PORT: string | number): void {
