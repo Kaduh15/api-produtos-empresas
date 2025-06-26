@@ -41,8 +41,7 @@ RUN pnpm install
 
 COPY . .
 
-RUN pnpm prisma generate
-RUN 
+RUN pnpm db:generate
 
 EXPOSE 3000
 
