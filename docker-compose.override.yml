@@ -11,4 +11,6 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: development
-    command: npm run dev
+      DATABASE_URL: ${DATABASE_URL:-postgres://docker:docker@db:5432/mydb}
+    depends_on:
+      - db

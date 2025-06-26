@@ -42,6 +42,7 @@ RUN pnpm install
 COPY . .
 
 RUN pnpm prisma generate
+RUN 
 
 EXPOSE 3000
 
