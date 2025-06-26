@@ -8,6 +8,8 @@
 		"build": "tsc --project tsconfig.json && tsc-alias",
 		"dev": "tsx --watch src/server.ts",
 		"lint": "biome check --write --unsafe",
+		"db:generate": "prisma generate",
+		"db:migrate": "prisma migrate dev",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
