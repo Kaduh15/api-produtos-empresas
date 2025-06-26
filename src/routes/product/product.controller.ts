@@ -1,9 +1,10 @@
 import type { Request, Response } from "express";
 
+import { InternalServerError } from "@/helpers/http-errors";
 import { HttpStatus } from "@/helpers/http-status";
 
 import type { ProductService } from "./product.service";
-import { createProductSchema } from "./schemas";
+import { createProductSchema, updateProductSchema } from "./schemas";
 
 export class ProductController {
 	private service: ProductService;
@@ -14,12 +15,10 @@ export class ProductController {
 
 	create = async (req: Request, res: Response) => {
 		const id = req.user?.id;
+		console.log("🚀 ~ ProductController ~ create= ~ id:", id);
 
 		if (!id) {
-			res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-				error: "Internal server error",
-			});
-			return;
+			throw new InternalServerError();
 		}
 
 		const data = createProductSchema.parse(req.body);
@@ -33,15 +32,12 @@ export class ProductController {
 	update = async (req: Request, res: Response) => {
 		const idCompany = req.user?.id;
 		if (!idCompany) {
-			res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-				error: "Internal server error",
-			});
-			return;
+			throw new InternalServerError();
 		}
 
 		const idProduct = req.params.id;
 
-		const data = req.body;
+		const data = updateProductSchema.parse(req.body);
 
 		const result = await this.service.update({ idCompany, idProduct, data });
 
@@ -52,48 +48,39 @@ export class ProductController {
 	getById = async (req: Request, res: Response) => {
 		const idCompany = req.user?.id;
 		if (!idCompany) {
-			res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-				error: "Internal server error",
-			});
-			return;
+			throw new InternalServerError();
 		}
 
-    const idProduct = req.params.id;
+		const idProduct = req.params.id;
 
-		const result = await this.service.getById({idCompany, idProduct});
+		const result = await this.service.getById({ idCompany, idProduct });
 
 		res.status(HttpStatus.OK).json(result);
 		return;
 	};
 
-  getAll = async (req: Request, res: Response) => {
-    const idCompany = req.user?.id;
-    if (!idCompany) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        error: "Internal server error",
-      });
-      return;
-    }
+	getAll = async (req: Request, res: Response) => {
+		const idCompany = req.user?.id;
+		if (!idCompany) {
+			throw new InternalServerError();
+		}
 
-    const result = await this.service.getAll({ idCompany });
-    res.status(HttpStatus.OK).json(result);
-    return;
-  }
+		const result = await this.service.getAll({ idCompany });
+		res.status(HttpStatus.OK).json(result);
+		return;
+	};
 
-  remove = async (req: Request, res: Response) => {
-    const idCompany = req.user?.id;
-    if (!idCompany) {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        error: "Internal server error",
-      });
-      return;
-    }
+	remove = async (req: Request, res: Response) => {
+		const idCompany = req.user?.id;
+		if (!idCompany) {
+			throw new InternalServerError();
+		}
 
-    const idProduct = req.params.id;
+		const idProduct = req.params.id;
 
-    await this.service.remove({ idCompany, idProduct });
+		await this.service.remove({ idCompany, idProduct });
 
-    res.status(HttpStatus.NO_CONTENT).send();
-    return;
-  }
+		res.status(HttpStatus.NO_CONTENT).send();
+		return;
+	};
 }

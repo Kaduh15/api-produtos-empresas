@@ -26,8 +26,8 @@ export default function authMiddleware() {
 		}
 
 		req.user = {
-			id: payload.sub
-		}
+			id: payload.sub,
+		};
 
 		return next();
 	};

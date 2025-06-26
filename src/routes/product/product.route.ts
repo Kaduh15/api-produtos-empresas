@@ -13,7 +13,7 @@ const productRouter = Router();
 
 const path = "/product";
 
-productRouter.post(path, productController.create);
+productRouter.post(path, authMiddleware(), productController.create);
 productRouter.get(path, authMiddleware(), productController.getAll);
 productRouter.get(`${path}/:id`, authMiddleware(), productController.getById);
 productRouter.put(`${path}/:id`, authMiddleware(), productController.update);

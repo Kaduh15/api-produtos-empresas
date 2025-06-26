@@ -21,8 +21,8 @@ export class ProductService {
 			where: { id: companyId },
 		}));
 
-		if (company) {
-			throw new NotFoundError("Company already exists");
+		if (!company) {
+			throw new NotFoundError("Company not found");
 		}
 
 		const newProduct = await this.model.product.create({

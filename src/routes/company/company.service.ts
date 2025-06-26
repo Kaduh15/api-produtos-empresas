@@ -85,10 +85,14 @@ export class CompanyService {
 	async getById(id: string) {
 		const company = await this.model.company.findUnique({
 			where: { id },
-			select: {
-				id: true,
-				name: true,
-				email: true,
+			include: {
+				products: {
+					select: {
+						id: true,
+						name: true,
+						price: true,
+					},
+				},
 			},
 		});
 
@@ -96,8 +100,28 @@ export class CompanyService {
 			throw new NotFoundError("Company not found");
 		}
 
+		const { password: _, ...companyWithoutPassword } = company;
+
 		return {
-			data: company,
+			data: companyWithoutPassword,
+		};
+	}
+
+	async getAll() {
+		const companies = await this.model.company.findMany({
+			select: {
+				id: true,
+				name: true,
+				email: true,
+			},
+		});
+
+		if (!companies || companies.length === 0) {
+			throw new NotFoundError("No companies found");
+		}
+
+		return {
+			data: companies,
 		};
 	}
 }

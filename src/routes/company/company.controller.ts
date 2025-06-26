@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
-
+import { InternalServerError } from "@/helpers/http-errors";
 import { HttpStatus } from "@/helpers/http-status";
-
 import type { CompanyService } from "./company.service";
 import { createCompanySchema } from "./schemas";
 
@@ -24,10 +23,7 @@ export class CompanyController {
 	update = async (req: Request, res: Response) => {
 		const id = req.user?.id;
 		if (!id) {
-			res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-				error: "Internal server error",
-			});
-			return;
+			throw new InternalServerError();
 		}
 
 		const data = req.body;
@@ -40,14 +36,19 @@ export class CompanyController {
 
 	getById = async (req: Request, res: Response) => {
 		const id = req.params.id || req.user?.id;
+		console.log("🚀 ~ CompanyController ~ getById= ~ id:", id);
 		if (!id) {
-			res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-				error: "Internal server error",
-			});
-			return;
+			throw new InternalServerError();
 		}
 
 		const result = await this.service.getById(id);
+
+		res.status(HttpStatus.OK).json(result);
+		return;
+	};
+
+	getAll = async (_req: Request, res: Response) => {
+		const result = await this.service.getAll();
 
 		res.status(HttpStatus.OK).json(result);
 		return;
