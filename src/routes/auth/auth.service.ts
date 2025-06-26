@@ -5,7 +5,7 @@ import { env } from "@/env";
 import type { PrismaClient } from "@/generated/prisma";
 import { NotFoundError, UnauthorizedError } from "@/helpers/http-errors";
 
-import type { AuthLoginSchema } from "./schemas/authLogin.schema";
+import type { AuthLoginSchema } from "./schemas";
 
 export class AuthService {
 	private model: PrismaClient;
