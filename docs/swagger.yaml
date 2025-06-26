@@ -1,0 +1,334 @@
+openapi: 3.0.0
+
+info:
+  description: Documentação da API com autenticação, empresas e produtos
+  title: API de Empresas e Produtos
+  version: 1.0.0
+openapi: 3.0.0
+paths:
+  /auth:
+    post:
+      requestBody:
+        content:
+          application/json:
+            example:
+              email: usuario@example.com
+              password: '123456'
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  token:
+                    type: string
+                type: object
+          description: Token JWT
+        '400':
+          description: Requisição inválida
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+      summary: Login do usuário
+      tags:
+      - Auth
+  /company:
+    post:
+      requestBody:
+        content:
+          application/json:
+            example:
+              email: empresa@example.com
+              name: Empresa LTDA
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: Empresa criada
+        '400':
+          description: Requisição inválida
+        '500':
+          description: Erro interno do servidor
+      summary: Criar uma nova empresa
+      tags:
+      - Company
+    put:
+      requestBody:
+        content:
+          application/json:
+            example:
+              email: empresa@example.com
+              name: Empresa LTDA
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: Empresa atualizada
+        '400':
+          description: Requisição inválida
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+      security:
+      - bearerAuth: []
+      summary: Atualizar dados da empresa logada
+      tags:
+      - Company
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Company'
+                type: array
+          description: Lista de empresas
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+      summary: Listar todas as empresas
+      tags:
+      - Company
+  /company/me:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: Dados da empresa
+        '401':
+          description: Não autorizado
+        '404':
+          description: Empresa não encontrada
+        '500':
+          description: Erro interno do servidor
+      security:
+      - bearerAuth: []
+      summary: Buscar dados da empresa logada
+      tags:
+      - Company
+  /company/{id}:
+    get:
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: Dados da empresa
+        '401':
+          description: Não autorizado
+        '404':
+          description: Empresa não encontrada
+        '500':
+          description: Erro interno do servidor
+      security:
+      - bearerAuth: []
+      summary: Buscar dados de uma empresa por ID
+      tags:
+      - Company
+  /product:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Product'
+                type: array
+          description: Lista de produtos
+        '401':
+          description: Não autorizado
+        '500':
+          description: Erro interno do servidor
+      security:
+      - bearerAuth: []
+      summary: Listar todos os produtos
+      security:
+        - bearerAuth: []
+      tags:
+      - Product
+    post:
+      requestBody:
+        content:
+          application/json:
+            example:
+              companyId: uuid-da-empresa
+              name: Produto X
+              price: 29.99
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Produto criado
+        '400':
+          description: Requisição inválida
+        '500':
+          description: Erro interno do servidor
+      summary: Criar um novo produto
+      security:
+        - bearerAuth: []
+      tags:
+      - Product
+  /product/{id}:
+    delete:
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: Produto removido com sucesso
+        '401':
+          description: Não autorizado
+        '404':
+          description: Produto não encontrado
+        '500':
+          description: Erro interno do servidor
+      security:
+        - bearerAuth: []
+      summary: Remover produto
+      tags:
+        - Product
+    get:
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Produto encontrado
+        '401':
+          description: Não autorizado
+        '404':
+          description: Produto não encontrado
+        '500':
+          description: Erro interno do servidor
+      security:
+      - bearerAuth: []
+      summary: Buscar produto por ID
+      tags:
+      - Product
+    put:
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: Produto X
+              price: 29.99
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: Produto atualizado
+        '400':
+          description: Requisição inválida
+        '401':
+          description: Não autorizado
+        '404':
+          description: Produto não encontrado
+        '500':
+          description: Erro interno do servidor
+      security:
+        - bearerAuth: []
+      summary: Atualizar produto
+      tags:
+      - Product
+tags:
+- description: Rotas de autenticação
+  name: Auth
+- description: Gerenciamento de empresas
+  name: Company
+- description: Gerenciamento de produtos
+  name: Product
+
+components:
+  schemas:
+    Company:
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        email:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      type: object
+    Product:
+      properties:
+        companyId:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http

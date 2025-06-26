@@ -1,11 +1,16 @@
+import path from "node:path";
 import cors from "cors";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 
 import "express-async-errors";
 
 import errorMiddleware from "@/middlewares/error.middleware";
 import { env } from "./env";
 import { routes } from "./routes";
+
+const swaggerDocument = YAML.load(path.join(__dirname, "../docs/swagger.yaml"));
 
 class App {
 	public app: express.Express;
@@ -40,9 +45,11 @@ class App {
 			return;
 		});
 
-		this.app.use(routes.authRouter)
+		this.app.use(routes.authRouter);
 		this.app.use(routes.companyRouter);
 		this.app.use(routes.productRouter);
+
+		this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 		this.app.use(errorMiddleware);
 
