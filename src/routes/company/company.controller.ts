@@ -37,4 +37,19 @@ export class CompanyController {
 		res.status(HttpStatus.OK).json(result);
 		return;
 	};
+
+	getById = async (req: Request, res: Response) => {
+		const id = req.params.id || req.user?.id;
+		if (!id) {
+			res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+				error: "Internal server error",
+			});
+			return;
+		}
+
+		const result = await this.service.getById(id);
+
+		res.status(HttpStatus.OK).json(result);
+		return;
+	};
 }

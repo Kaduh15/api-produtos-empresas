@@ -15,5 +15,7 @@ const path = "/company";
 
 companyRouter.post(path, companyController.create);
 companyRouter.put(path, authMiddleware(), companyController.update);
+companyRouter.get(path, authMiddleware(), companyController.getById);
+companyRouter.get(`${path}/:id`, authMiddleware(), companyController.getById);
 
 export { companyRouter };

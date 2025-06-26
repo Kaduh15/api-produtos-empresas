@@ -81,4 +81,23 @@ export class CompanyService {
 			data: updatedCompany,
 		};
 	}
+
+	async getById(id: string) {
+		const company = await this.model.company.findUnique({
+			where: { id },
+			select: {
+				id: true,
+				name: true,
+				email: true,
+			},
+		});
+
+		if (!company) {
+			throw new NotFoundError("Company not found");
+		}
+
+		return {
+			data: company,
+		};
+	}
 }
