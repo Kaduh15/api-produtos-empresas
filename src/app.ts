@@ -42,6 +42,7 @@ class App {
 
 		this.app.use(routes.authRouter)
 		this.app.use(routes.companyRouter);
+		this.app.use(routes.productRouter);
 
 		this.app.use(errorMiddleware);
 
