@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import {HttpStatus} from "@/helpers/http-status";
+import { HttpStatus } from "@/helpers/http-status";
 
 import type { AuthService } from "./auth.service";
 
@@ -15,6 +15,6 @@ export class AuthController {
 		const token = await this.service.login({ email, password });
 
 		res.status(HttpStatus.OK).json(token);
-    return;
+		return;
 	};
 }

@@ -27,17 +27,20 @@ export class AuthService {
 		if (!user) {
 			throw new NotFoundError("User not found");
 		}
+		let isPasswordValid = false;
 
-		const isPasswordValid = await argon2.verify(password, user.password);
+		try {
+			isPasswordValid = await argon2.verify(user.password, password);
+		} catch {
+			throw new UnauthorizedError("Data is not valid");
+		}
 
 		if (!isPasswordValid) {
-			throw new UnauthorizedError("Invalid password");
+			throw new UnauthorizedError("Data is not valid");
 		}
 
 		const token = jwt.sign({ sub: user.id }, env.JWT_SECRET, {
 			expiresIn: "1h",
-			issuer: "manager",
-			audience: "company",
 		});
 
 		return { token };

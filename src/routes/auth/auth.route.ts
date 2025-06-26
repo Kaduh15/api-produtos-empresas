@@ -10,6 +10,8 @@ const authController = new AuthController(authService);
 
 const authRouter = Router();
 
-authRouter.post("/", authController.login);
+const path = "/auth";
+
+authRouter.post(path, authController.login);
 
 export { authRouter };

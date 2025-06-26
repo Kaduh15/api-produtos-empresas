@@ -5,6 +5,7 @@ import "express-async-errors";
 
 import errorMiddleware from "@/middlewares/error.middleware";
 import { env } from "./env";
+import * as routes from "./routes/auth/auth.route";
 
 class App {
 	public app: express.Express;
@@ -38,7 +39,9 @@ class App {
 			});
 			return;
 		});
-		
+
+		this.app.use(routes.authRouter)
+
 		this.app.use(errorMiddleware);
 
 		this.app.use("*", (_req, res, _next) => {
