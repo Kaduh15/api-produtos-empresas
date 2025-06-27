@@ -25,8 +25,8 @@ Este projeto é uma API RESTful que permite que empresas se cadastrem, façam lo
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/Kaduh15/boilerplate_nestjs
-cd boilerplate_nestjs
+git clone https://github.com/Kaduh15/api-produtos-empresas
+cd api-produtos-empresas
 ```
 
 ### 2. Configure o `.env`
